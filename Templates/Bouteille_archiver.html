@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouteilles Archivées</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            text-align: center;
+            background-color: #8B0000;
+            color: #fff;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            color: inherit; /* Cela garantit que le texte prend la couleur de ses conteneurs */
+        }
+
+        .header, .footer {
+            background-color: #8B0000;
+            color: white !important; /* Ajoutez !important pour forcer la couleur */
+            opacity: 1; /* Assurez-vous que l'opacité est à 1 */
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #8B0000;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #8B0000;
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #8B0000;
+            color: #ffffff;
+            font-size: 1.1em;
+        }
+
+        td {
+            background-color: #ffffff;
+            font-size: 1em;
+        }
+
+        td.actions {
+            background-color: #ffffff;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background-color: #8B0000;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #5a0000;
+            color: #fff;
+        }
+
+        .btn-retour_bou {
+            background-color: #FF8C00;
+        }
+
+        .btn-retour_bou:hover {
+            background-color: #FF7F00;
+            ;
+        }
+
+        .btn-retour_eta {
+            background-color: #d24a02;
+        }
+
+        .btn-retour_eta:hover {
+            background-color: #a53b01;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+
+        .no-data {
+            color: #888;
+            font-style: italic;
+        }
+
+        footer {
+            background-color: #8B0000;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 5px 5px;
+        }
+
+        h2 {
+            color: #8B0000;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h2, .footer p {
+            color: white !important;
+        }
+
+        .stars {
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Bouteilles archivées de l'étagère {{ numero_etagere }}</h2>
+    </div>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Année</th>
+                    <th>Région</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bouteille in bouteilles %}
+                <tr>
+                    <td>{{ bouteille.nom }}</td>
+                    <td>{{ bouteille.type_bouteille }}</td>
+                    <td>{{ bouteille.annee }}</td>
+                    <td>{{ bouteille.region }}</td>
+                    <td>{{ bouteille.prix }}</td>
+                    <td>{{ bouteille.total_nb_bouteille }}</td>
+                    <td>
+                        {% if bouteille.note_perso %}
+                            <span>{{ bouteille.note_perso | int }}</span>
+                            <span class="stars">★</span>
+                        {% else %}
+                            <span class="no-data">Pas encore noté</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="no-data">Aucune bouteille archivée trouvée.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="button-container">
+            <a href="{{ url_for('view_etageres', cave_id=cave_id) }}" class="btn btn-retour_eta">Retour aux étagères</a>
+            <a href="{{ url_for('view_bouteilles', etagere_id=etagere_id) }}" class="btn btn-retour_bou">Retour aux bouteilles</a>
+        </div>
+    </div>
+
+
+</body>
+
+<footer>
+    © 2024 Alexandre Lakomy 20/20 ou rien. Tous droits réservés.
+</footer>
+</html>

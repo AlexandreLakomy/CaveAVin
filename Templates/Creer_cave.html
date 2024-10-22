@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer une Cave</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            width: 250px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #8B0000;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #a00a00;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Créer une nouvelle Cave</h1>
+    
+    <div class="container">
+        <form action="{{ url_for('creer_cave') }}" method="POST">
+            <input type="text" name="nom_cave" placeholder="Nom de la Cave" required><br>
+            <button type="submit">Créer la Cave</button>
+        </form>
+    </div>
+
+</body>
+</html>

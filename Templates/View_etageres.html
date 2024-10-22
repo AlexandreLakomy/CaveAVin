@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Étageres de la Cave</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #8B0000;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 1000px;
+            width: 90%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 2px solid #8B0000;
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #8B0000;
+            color: white;
+        }
+
+        a {
+            color: #8B0000;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin: 5px 0;
+        }
+
+        .btn-ajouter-etagere {
+            background-color: #008000;
+        }
+
+        .btn-ajouter-etagere:hover {
+            background-color: #006400;
+        }
+
+        .btn-retour-dashboard {
+            background-color: #FF8C00;
+        }
+
+        .btn-retour-dashboard:hover {
+            background-color: #FF7F00;
+        }
+
+        .btn-supprimer-etagere {
+            background-color: #FF0000;
+        }
+
+        .btn-supprimer-etagere:hover {
+            background-color: #a00a00;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #8B0000;
+        }
+
+        .modal-content .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn-cancel {
+            background-color: #760000;
+            color: white;
+        }
+
+        .btn-confirm {
+            background-color: #008000;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #a00a00;
+        }
+
+        .btn-confirm:hover {
+            background-color: #006400;
+        }
+
+        footer {
+            background-color: #8B0000;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Étagères de la Cave {{ cave.nom_cave }}</h2>
+    </div>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Numéro d'Étagère</th>
+                    <th>Nombre de places</th>
+                    <th>Nombre de bouteilles</th>
+                    <th>Places restantes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for etagere in etageres %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('view_bouteilles', etagere_id=etagere.id_etagere) }}">{{ etagere.numero }}</a>
+                    </td>
+                    <td>{{ etagere.nb_places }}</td>
+                    <td>{{ etagere.nb_bouteilles }}</td>
+                    <td>{{ etagere.places_restantes }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">Aucune étagère trouvée.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="button-container">
+            <a href="{{ url_for('creer_etagere', cave_id=cave.id_cave) }}" class="btn btn-ajouter-etagere">Ajouter une nouvelle Étagère</a>
+            <button class="btn btn-supprimer-etagere" onclick="openModal()">Supprimer une Étagère</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-retour-dashboard">Retour au Dashboard</a>
+        </div>
+    </div>
+    
+    <!-- Pop-up de confirmation -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h3>Quelle est l'étagère que vous souhaitez supprimer ?</h3>
+            <form id="deleteForm" method="POST" action="{{ url_for('delete_etageres', cave_id=cave.id_cave) }}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Selectionner</th>
+                            <th>Numéro d'Étagère</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for etagere in etageres %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="etagere_ids" value="{{ etagere.id_etagere }}">
+                            </td>
+                            <td>{{ etagere.numero }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="button-container">
+                    <button type="button" class="btn btn-cancel" onclick="closeModal()">Annuler</button>
+                    <button type="submit" class="btn btn-confirm">Confirmer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 Alexandre Lakomy 20/20 ou rien. Tous droits réservés.
+    </footer>
+
+    <script>
+        function openModal() {
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

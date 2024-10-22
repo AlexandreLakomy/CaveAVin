@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouteilles</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .header {
+            background-color: #8B0000;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header, .footer {
+            background-color: #8B0000;
+            color: white !important; /* Ajoutez !important pour forcer la couleur */
+            opacity: 1; /* Assurez-vous que l'opacité est à 1 */
+        }
+
+        body {
+            color: inherit; /* Cela garantit que le texte prend la couleur de ses conteneurs */
+        }
+
+        .header h2, .footer p {
+            color: white !important;
+        }
+
+        footer {
+            background-color: #8B0000;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 5px 5px;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #8B0000;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 2px solid #8B0000;
+            padding: 20px;
+            text-align: center;
+            width: 12.5%;
+        }
+
+        th {
+            background-color: #8B0000;
+            color: white;
+        }
+
+        .actions-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin: 5px 0;
+        }
+
+        .btn-template {
+            background-color: #008000;
+        }
+
+        .btn-template:hover {
+            background-color: #006400;
+        }
+
+        .btn-retour {
+            background-color: #FF0000;
+        }
+
+        .btn-retour:hover {
+            background-color: #a00a00;
+        }
+
+        .btn-note {
+            background-color: #ffea00;
+            color: black;
+        }
+
+        .btn-note:hover {
+            background-color: #decb00;
+        }
+
+        .btn-archiver {
+            background-color: #FF0000;
+        }
+
+        .btn-archiver:hover {
+            background-color: #a00a00;
+        }
+
+        .form-trier {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .form-trier select, .form-trier button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #8B0000;
+            margin-left: 10px;
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #FFD700;
+        }
+
+        .star-rating input:checked ~ label {
+            color: #FFD700;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn-cancel {
+            background-color: #FF0000;
+            color: white;
+        }
+
+        .btn-confirm {
+            background-color: #008000;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #a00a00;
+        }
+
+        .btn-confirm:hover {
+            background-color: #006400;
+        }
+
+        .actions-form .btn {
+            width: 200px;
+        }
+
+        .stars {
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+        
+        input[type="number"] {
+            width: 100px; /* Augmentez cette valeur pour élargir le champ */
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .btn-orange {
+            background-color: #FF8C00;
+            color: white;
+            font-size: 16px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-orange:hover {
+            background-color: #FF7F00;
+        }
+
+        /* Styles pour la pop-up de commentaire */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup textarea {
+            width: 90%; /* Ajustez cette valeur pour réduire la largeur */
+            max-width: 350px; /* Limite maximale pour la largeur */
+            height: 100px;
+            padding: 10px;
+            margin: 10px auto; /* Centre le textarea dans la pop-up */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+
+
+        .popup-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn-cancel {
+            background-color: #FF0000;
+            color: white;
+        }
+
+        .btn-confirm {
+            background-color: #008000;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #a00a00;
+        }
+
+        .btn-confirm:hover {
+            background-color: #006400;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Bouteilles de l'étagère {{ numero_etagere }}</h2>
+    </div>
+    <div class="container">
+
+        <form class="form-trier" method="GET" action="{{ url_for('trier_bouteilles', etagere_id=etagere_id) }}">
+            <label for="critere">Trier par :</label>
+            <select name="critere" id="critere">
+                <option value="nom">Nom</option>
+                <option value="type_bouteille">Type</option>
+                <option value="annee">Année</option>
+                <option value="region">Région</option>
+                <option value="prix">Prix</option>
+                <option value="nb_bouteille">Quantité</option>
+                <option value="note_perso">Note</option>
+            </select>
+            <button type="submit">Trier</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Année</th>
+                    <th>Région</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Note</th>
+                    <th>Commentaire</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if bouteilles %}
+                    {% for bouteille in bouteilles %}
+                    <tr>
+                        <td>{{ bouteille.nom }}</td>
+                        <td>{{ bouteille.type_bouteille }}</td>
+                        <td>{{ bouteille.annee }}</td>
+                        <td>{{ bouteille.region }}</td>
+                        <td>{{ bouteille.prix }}</td>
+                        <td>{{ bouteille.total_nb_bouteille }}</td>
+                        <td>
+                            {% if bouteille.note_perso %}
+                                <span>{{ bouteille.note_perso | float }}</span>
+                                <span class="stars">★</span>
+                            {% else %}
+                                Pas encore noté
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if bouteille.commentaires %}
+                                <ul style="list-style-type: none; padding: 0;">
+                                    {% for commentaire in bouteille.commentaires.split(', ') %}
+                                        <li>{{ commentaire }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                Aucun commentaire
+                            {% endif %}
+                        </td>
+                        
+                        
+                        <td class="actions">
+                          
+
+                            <div class="actions-form">
+                                <form method="POST" action="{{ url_for('ajouter_commentaire', bouteille_id=bouteille.id_bouteille) }}">
+                                    <button type="button" class="btn btn-template" onclick="openCommentPopup('{{ bouteille.id_bouteille }}')">Ajouter un commentaire</button>
+                                </form>
+                                
+
+                                <form method="POST" action="{{ url_for('archiver_bouteille', bouteille_id=bouteille.id_bouteille) }}">
+                                    <input type="hidden" name="id_bouteille" value="{{ bouteille.id_bouteille }}">
+                                    <input type="hidden" min="1" max="{{ bouteille.total_nb_bouteille }}" name="quantity" value="1">
+                                    <button class="btn btn-archiver" type="button" onclick="openModal('{{ bouteille.id_bouteille }}', '{{ bouteille.total_nb_bouteille }}')">Archiver</button>
+                                </form>
+                                <button type="button" class="btn btn-note" onclick="openRatingPopup('{{ bouteille.id_bouteille }}')">Noter</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8">Aucune bouteille trouvée.</td>
+                    </tr>
+                {% endif %}
+            </tbody>                        
+        </table>
+
+        <!-- Pop-up pour les commentaires -->
+        <div class="popup" id="comment-popup">
+            <div class="popup-content">
+                <h3>Ajouter un commentaire</h3>
+                <form id="commentForm" method="POST">
+                    <textarea name="commentaire" id="comment-text" placeholder="Écrire un commentaire..." required></textarea>
+                    <div class="popup-buttons">
+                        <button type="button" class="btn btn-cancel" onclick="closeCommentPopup()">Annuler</button>
+                        <button type="submit" class="btn btn-confirm">Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Pop-up for archiving a quantity of bottles -->
+        <div id="modal" class="popup">
+            <div class="popup-content">
+                <h3>Confirmer l'archivage</h3>
+                <form id="archiveForm" method="POST">
+                    <input type="hidden" name="id_bouteille" id="modalBouteilleId">
+                    <input type="number" min="1" name="quantity" id="modalQuantity" value="1">
+                    <div class="popup-buttons">
+                        <button type="button" class="btn btn-cancel" onclick="closeModal()">Annuler</button>
+                        <button type="submit" class="btn btn-confirm">Confirmer</button>
+                    </div>
+                </form>
+                             
+            </div>
+        </div>
+
+        <!-- Pop-up pour la notation -->
+        <div class="popup" id="rating-popup">
+            <div class="popup-content">
+                <h3>Quelle note souhaitez-vous mettre à cette bouteille ?</h3>
+                <div class="star-rating">
+                    {% for i in range(10, 0, -1) %}
+                        <input type="radio" name="rating" id="star-{{ i }}" value="{{ i }}">
+                        <label for="star-{{ i }}">★</label>
+                    {% endfor %}
+                </div>                               
+                <div class="popup-buttons">
+                    <button class="btn-cancel" onclick="closePopup()">Annuler</button>
+                    <button class="btn-confirm" onclick="submitRating()">Confirmer</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <a href="{{ url_for('view_templates', etagere_id=etagere_id) }}" class="btn btn-template">Ajouter une Bouteille</a>
+            <a href="{{ url_for('view_bouteilles', etagere_id=etagere_id, archivee='true') }}" class="btn btn-orange">Voir mes bouteilles archivées</a>
+            <a href="{{ url_for('view_etageres', cave_id=cave_id) }}" class="btn btn-retour">Retour aux Étagères</a>
+        </div>
+    </div>
+
+    <script>
+        function openCommentPopup(idBouteille) {
+            const commentPopup = document.getElementById('comment-popup');
+            const commentForm = document.getElementById('commentForm');
+
+            // Mettre à jour l'action du formulaire pour le bon id_bouteille
+            commentForm.action = `/ajouter_commentaire/${idBouteille}`;
+
+            commentPopup.style.display = 'flex';
+        }
+
+        function closeCommentPopup() {
+            document.getElementById('comment-popup').style.display = 'none';
+        }
+
+
+        function openRatingPopup(id_bouteille) {
+            const ratingPopup = document.getElementById('rating-popup');
+            ratingPopup.dataset.idBouteille = id_bouteille;
+            ratingPopup.style.display = 'flex';
+        }
+
+
+        function openModal(idBouteille, maxQuantity) {
+            const modal = document.getElementById('modal');
+            const modalBouteilleId = document.getElementById('modalBouteilleId');
+            const modalQuantity = document.getElementById('modalQuantity');
+            const archiveForm = document.getElementById('archiveForm');
+
+            modalBouteilleId.value = idBouteille;
+            modalQuantity.max = maxQuantity;
+            modalQuantity.value = 1;
+
+            // Mettre à jour l'URL du formulaire
+            archiveForm.action = `/archiver_bouteille/${idBouteille}`;
+
+            modal.style.display = 'flex';
+        }
+
+
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+
+        function closePopup() {
+            const ratingPopup = document.getElementById('rating-popup');
+            ratingPopup.style.display = 'none';
+        }
+
+        function submitArchive() {
+            const form = document.getElementById('archiveForm');
+            form.submit();
+            window.location.reload();
+        }
+
+        function submitRating() {
+            const ratingPopup = document.getElementById('rating-popup');
+            const id_bouteille = ratingPopup.dataset.idBouteille;
+            const noteElement = document.querySelector('input[name="rating"]:checked');
+            const note = noteElement ? noteElement.value : null;
+
+            if (!note) {
+                alert("Veuillez sélectionner une note avant de confirmer.");
+                return;
+            }
+
+            fetch('/noter_bouteille', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id_bouteille=${id_bouteille}&note=${note}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Erreur lors de la notation : ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Erreur lors de la communication avec le serveur : ' + error.message);
+            });
+        }
+    </script>
+</body>
+<footer>
+    © 2024 Alexandre Lakomy 20/20 ou rien. Tous droits réservés.
+</footer>
+</html>

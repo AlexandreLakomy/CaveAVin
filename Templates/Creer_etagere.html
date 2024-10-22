@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer une Etagère</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input, button, select {
+            padding: 10px;
+            margin: 10px;
+            width: 250px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #8B0000;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #a00a00;
+        }
+        .error-message {
+            color: red;
+            font-size: 18px; /* Augmenter la taille du texte */
+            margin-top: 20px; /* Ajouter plus d'espace au-dessus du message */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Créer une nouvelle Etagère</h1>
+    
+    <div class="container">
+        <form method="POST">
+            <label for="numero_etagere">Numéro de l'étagère</label>
+            <input type="text" id="numero_etagere" name="numero_etagere" required>
+    
+            <label for="nb_places">Nombre d'emplacements</label>
+            <input type="number" id="nb_places" name="nb_places" min="1" required>
+    
+            <button type="submit">Ajouter l'étagère</button>
+            
+            {% if error_message %}
+                <div class="error-message">{{ error_message }}</div>
+            {% endif %}
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une Bouteille</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input, select, button {
+            padding: 10px;
+            margin: 10px;
+            width: 250px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #8B0000;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #a00a00;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ajouter une nouvelle Bouteille</h1>
+    
+    <div class="container">
+        <form method="POST" action="{{ url_for('ajouter_bouteille', etagere_id=etagere_id) }}">
+            <input type="hidden" name="etagere_id" value="{{ etagere_id }}">
+            <input type="text" name="domaine" placeholder="Domaine" required>
+            <input type="text" name="nom" placeholder="Nom" required>
+            <input type="text" name="type_bouteille" placeholder="Type" required>
+            <input type="number" name="annee" placeholder="Année" required>
+            <input type="text" name="region" placeholder="Région" required>
+            <input type="number" name="prix" placeholder="Prix" step="0.01" required>
+            <button type="submit">Ajouter à mon étagère</button>
+        </form>        
+    </div>
+
+</body>
+</html>

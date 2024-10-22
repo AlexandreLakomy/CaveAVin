@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            margin: 0 auto;
+            padding: 1em;
+            max-width: 300px;
+            background-color: #f2f2f2;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: calc(100% - 22px);
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        button, .signup-button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 48%;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .signup-button {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .signup-button:hover {
+            background-color: #0056b3;
+        }
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .forgot-password a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align: center;">Connexion</h2>
+
+    <form action="/login" method="POST">
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" required>
+
+        <label for="mot_de_passe">Mot de passe:</label>
+        <input type="password" id="mot_de_passe" name="mot_de_passe" required>
+
+        <div class="button-container">
+            <button type="submit">Se connecter</button>
+            <a href="/inscription" class="signup-button">S'inscrire</a>
+        </div>
+        <div class="forgot-password">
+            <p><a href="/mdp_oublie">Mot de passe oublié ?</a></p>
+        </div>
+        <!-- Déplacer le message d'erreur ici, sous les boutons -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="error">
+                    {{ messages[-1][1] }}  <!-- Affiche uniquement le dernier message -->
+                </div>
+            {% endif %}
+        {% endwith %}
+    </form>
+
+</body>
+</html>

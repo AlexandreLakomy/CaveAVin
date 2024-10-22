@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une bouteille à l'étagère</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background-color: #8B0000;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            width: 100%;
+            height: 300px;
+            background: #f9f9f9;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card h3 {
+            font-size: 1.4em;
+            margin: 10px 0;
+        }
+
+        .price {
+            color: #d9534f;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .quantity-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .quantity-input input {
+            width: 60px;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .btn-orange {
+            background-color: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-orange:hover {
+            background-color: #FF7F00;
+        }
+
+        footer {
+            background-color: #8B0000;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .details {
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .comments {
+            margin-top: 15px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .comment {
+            margin-bottom: 5px;
+            font-style: italic;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .btn-template {
+            background-color: #FF0000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-template:hover {
+            background-color: #a00a00;
+        }
+
+        .btn-retour {
+            background-color: #008000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-retour:hover {
+            background-color: #006400;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Ajouter une bouteille à l'étagère
+    </header>
+    <div class="container">
+        <div class="grid">
+            {% for template in templates %}
+            <div class="card">
+                <form action="{{ url_for('add_bottle_from_template', etagere_id=etagere_id) }}" method="POST">
+                    <div class="image-container">
+                        <img src="{{ url_for('static', filename=template.image_path if template.image_path else 'images/default.png') }}" alt="Photo de {{ template.nom }}">
+                    </div>
+                    <h3>{{ template.nom }}</h3>
+                    <p class="price" data-base-price="{{ template.prix }}">{{ template.prix }} €</p>
+                    <div class="quantity-input">
+                        <input type="hidden" name="template_id" value="{{ template.id }}">
+                        <input type="number" min="1" value="1" name="quantity" oninput="updatePrice(this, '{{ template.prix }}', this.closest('.card').querySelector('.price'))">
+                        <button type="submit" class="btn-orange">Ajouter à l'étagère</button>
+                    </div>
+                </form>
+                <div class="details">
+                    <p><strong>Domaine :</strong> {{ template.domaine }}</p>
+                    <p><strong>Type :</strong> {{ template.type_bouteille }}</p>
+                    <p><strong>Année :</strong> {{ template.annee }}</p>
+                    <p><strong>Région :</strong> {{ template.region }}</p>
+                    <p><strong>Note Moyenne :</strong> {{ template.note_moyenne }} / 10     <strong style="color: yellow; text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;">★</strong></p>
+                    <p><strong>Prix :</strong> {{ template.prix }} €</p>
+                </div>
+                <div class="comments">
+                {% if template.commentaires %}
+                    <strong>Commentaires :</strong>
+                    <br><br><br>
+                    <ul style="list-style-type: none; padding: 0; margin: 0;">
+                        {% for commentaire in template.commentaires.split(', ') %}
+                            <li style="margin-left: 0;">Commentaire : {{ commentaire }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Aucun commentaire disponible.</p>
+                {% endif %}
+                
+                </div>
+                
+            </div>
+                    
+            {% endfor %}
+        </div>
+    </div>
+    <div class="actions">
+        <a href="{{ url_for('creer_template_bouteille', etagere_id=etagere_id) }}" class="btn-template">Créer un Template</a>
+        <a href="{{ url_for('view_bouteilles', etagere_id=etagere_id) }}" class="btn-retour">Retour aux Bouteilles</a>
+    </div>
+    
+    <footer>
+        © 2024 Alexandre Lakomy 20/20 ou rien. Tous droits réservés.
+    </footer>
+    <script>
+        function updatePrice(input, basePrice, displayElement) {
+            const quantity = input.value;
+            const totalPrice = (basePrice * quantity).toFixed(2);
+            displayElement.textContent = totalPrice + ' €';
+        }
+    </script>
+</body>
+</html>

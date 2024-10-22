@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page d'accueil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+        }
+
+        .header {
+            background-color: #8B0000;
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav {
+            position: absolute;
+            margin: 10px;
+            right: 20px;
+            top: 20px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        .nav a:first-child {
+            background-color: #8B0000; /* Couleur du site pour 'Se connecter' */
+            color: white;
+        }
+
+        .nav a:first-child:hover {
+            background-color: #a00a00; /* Couleur au survol pour 'Se connecter' */
+        }
+
+        .nav a:last-child {
+            background-color: #760000; /* Bordeaux/marron pour 'S'inscrire' */
+            color: white;
+        }
+
+        .nav a:last-child:hover {
+            background-color: #a00a00; /* Couleur plus claire au survol pour 'S'inscrire' */
+        }
+
+        .nav a:hover {
+            background-color: #e68a00;
+        }
+
+        h1 {
+            color: #8B0000;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .image-container {
+            position: relative;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .hover-image {
+            border-radius: 50%;
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .hover-text {
+            visibility: hidden;
+            width: 220px;
+            background-color: #8B0000;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .image-container:hover .hover-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .image-container.clicked .hover-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        footer {
+            background-color: #8B0000;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre en haut avec le texte et les boutons -->
+    <div class="header">
+        <h2>Bienvenue sur la boutique Diesel</h2>
+        <div class="nav">
+            <a href="{{ url_for('login') }}">Se connecter</a>
+            <a href="{{ url_for('inscription') }}">S'inscrire</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='images/vin_diesel.png') }}" alt="Vin Diesel" class="hover-image" target="_blank">
+            <a href="https://www.instagram.com/p/CsZaaT4SE-x/" class="hover-text" target="_blank">Toi aussi tu aimes le vin ?</a>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 Alexandre Lakomy 20/20 ou rien. Tous droits réservés.
+    </footer>
+
+    <script>
+        const imageContainer = document.querySelector('.image-container');
+        const hoverText = document.querySelector('.hover-text');
+
+        imageContainer.addEventListener('click', function() {
+            imageContainer.classList.add('clicked');
+        });
+
+        hoverText.addEventListener('click', function(event) {
+            event.preventDefault();
+            window.open('https://www.instagram.com/p/CsZaaT4SE-x/', '_blank');
+        });
+    </script>
+
+</body>
+</html>
